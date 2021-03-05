@@ -68,12 +68,7 @@ components:
               - nestedId
               - nestedNumber
         enum:
-          type: string
-          enum:
-            - AAA
-            - BBB
-            - CCC
-            - DDD
+          $ref: '#/components/schemas/HogeEnum'
         date:
           type: string
           format: date-time
@@ -101,3 +96,11 @@ components:
         - fooId
         - fooNumber
         - fooBool
+    HogeEnum:
+      type: string
+      title: HogeEnum
+      enum:
+        - AAA
+        - BBB
+        - CCC
+        - DDD

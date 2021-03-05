@@ -15,13 +15,16 @@
 
 module Api.Data exposing
     ( Foo
-    , Hoge, HogeEnum(..), hogeEnumVariants
+    , Hoge
+    , HogeEnum(..), hogeEnumVariants
     , HogeNestedList
     , encodeFoo
     , encodeHoge
+    , encodeHogeEnum
     , encodeHogeNestedList
     , fooDecoder
     , hogeDecoder
+    , hogeEnumDecoder
     , hogeNestedListDecoder
     )
 
@@ -120,12 +123,13 @@ encodeHogePairs model =
             , encode "integer" Json.Encode.int model.integer
             , encode "bool" Json.Encode.bool model.bool
             , encode "nestedList" (Json.Encode.list encodeHogeNestedList) model.nestedList
-            , encode "enum"  model.enum
+            , encode "enum" encodeHogeEnum model.enum
             , encode "date" Api.Time.encodeDateTime model.date
             , maybeEncode "integerMaybe" Json.Encode.int model.integerMaybe
             ]
     in
     pairs
+
 
 stringFromHogeEnum : HogeEnum -> String
 stringFromHogeEnum model =
@@ -146,7 +150,6 @@ stringFromHogeEnum model =
 encodeHogeEnum : HogeEnum -> Json.Encode.Value
 encodeHogeEnum =
     Json.Encode.string << stringFromHogeEnum
-
 
 
 encodeHogeNestedList : HogeNestedList -> Json.Encode.Value
@@ -189,7 +192,7 @@ hogeDecoder =
         |> decode "integer" Json.Decode.int 
         |> decode "bool" Json.Decode.bool 
         |> decode "nestedList" (Json.Decode.list hogeNestedListDecoder) 
-        |> decode "enum"  
+        |> decode "enum" hogeEnumDecoder 
         |> decode "date" Api.Time.dateTimeDecoder 
         |> maybeDecode "integerMaybe" Json.Decode.int Nothing
 
@@ -215,7 +218,6 @@ hogeEnumDecoder =
                     other ->
                         Json.Decode.fail <| "Unknown type: " ++ other
             )
-
 
 
 hogeNestedListDecoder : Json.Decode.Decoder HogeNestedList
