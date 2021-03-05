@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: api
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /hoges:
+    get:
+      summary: HogeGet
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hoge'
+      operationId: get-hoges
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+  /foos:
+    post:
+      summary: FooPost
+      operationId: post-foos
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Foo'
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+components:
+  schemas:
+    Hoge:
+      title: Hoge
+      type: object
+      properties:
+        id:
+          type: string
+        number:
+          type: number
+        integer:
+          type: integer
+        bool:
+          type: boolean
+        nestedList:
+          type: array
+          items:
+            type: object
+            properties:
+              nestedId:
+                type: string
+              nestedNumber:
+                type: number
+            required:
+              - nestedId
+              - nestedNumber
+        enum:
+          type: string
+          enum:
+            - AAA
+            - BBB
+            - CCC
+            - DDD
+        date:
+          type: string
+          format: date-time
+        integerMaybe:
+          type: integer
+      required:
+        - id
+        - number
+        - integer
+        - bool
+        - nestedList
+        - enum
+        - date
+    Foo:
+      title: Foo
+      type: object
+      properties:
+        fooId:
+          type: string
+        fooNumber:
+          type: number
+        fooBool:
+          type: boolean
+      required:
+        - fooId
+        - fooNumber
+        - fooBool
